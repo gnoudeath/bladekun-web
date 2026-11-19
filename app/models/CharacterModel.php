@@ -37,6 +37,8 @@ class CharacterModel extends Model
     private const ANCHOR_X = 46;
     /** Khoảng cách từ chân nhân vật tới đáy khung: số CÀNG LỚN nhân vật càng LÊN CAO (px). */
     private const BOTTOM_GAP = 18;
+    /** Độ cao đầu so với thân (px): số CÀNG LỚN đầu càng LÊN CAO, càng nhỏ đầu càng lún xuống thân. */
+    private const HEAD_RISE = 73;   // 73 = giữ đúng độ cao bạn đã chỉnh tay (đầu chuẩn như cũ)
 
     private static ?array $partsMeta = null;
 
@@ -140,7 +142,10 @@ class CharacterModel extends Model
         $left = (int) (self::STAGE_W / 2 - self::ANCHOR_X);
         $legTop  = self::STAGE_H - self::BOTTOM_GAP - $l['h'] + $l['dy'];
         $bodyTop = $legTop + 24 - $b['h'] + $b['dy'];
-        $headTop = $bodyTop + 11 - $h['h'] + $h['dy'];
+        // Đầu: game căn theo MỐC CHUNG (dy là vị trí mép trên so với mốc; cằm luôn ở dy + cao = 80 với phần lớn đầu),
+        // nên KHÔNG căn theo đáy ảnh – các đầu cao thấp khác nhau (Namếc, Krillin...) mới cùng khớp với thân.
+        // Số HEAD_RISE = độ cao mốc đầu so với mép trên thân: TĂNG => đầu nhô CAO lên, GIẢM => đầu hạ THẤP xuống.
+        $headTop = $bodyTop - self::HEAD_RISE + $h['dy'];
 
         $mk = fn(array $p, int $top, int $z) => [
             'src' => asset('img/' . $p['f']), 'w' => $p['w'], 'h' => $p['h'],
