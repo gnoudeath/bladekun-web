@@ -32,8 +32,11 @@ class CharacterModel extends Model
     /** Kích thước khung hiển thị (px) – CSS .char-stage phải khớp. */
     public const STAGE_W = 240;
     public const STAGE_H = 250;
-    /** Mốc ngang chung của đầu/thân/chân tính từ giữa khung (px, ảnh zoom x4). */
+    // ===== CHỈNH VỊ TRÍ CẢ NHÂN VẬT TRONG KHUNG: chỉ cần sửa 2 số này (đầu/thân/chân dịch chuyển cùng nhau) =====
+    /** Dịch ngang: số CÀNG LỚN nhân vật càng sang TRÁI; càng nhỏ càng sang PHẢI (px). */
     private const ANCHOR_X = 46;
+    /** Khoảng cách từ chân nhân vật tới đáy khung: số CÀNG LỚN nhân vật càng LÊN CAO (px). */
+    private const BOTTOM_GAP = 18;
 
     private static ?array $partsMeta = null;
 
@@ -135,7 +138,7 @@ class CharacterModel extends Model
         // (đúng như game: dx/dy là vị trí góc trên-trái của mảnh so với mốc chung, KHÔNG căn giữa theo bề rộng ảnh –
         // căn giữa làm đầu lệch khỏi thân). Theo chiều dọc: thân đè lên chân 24px, đầu đè lên thân 24px (ảnh zoom x4).
         $left = (int) (self::STAGE_W / 2 - self::ANCHOR_X);
-        $legTop  = self::STAGE_H - 6 - $l['h'] + $l['dy'];
+        $legTop  = self::STAGE_H - self::BOTTOM_GAP - $l['h'] + $l['dy'];
         $bodyTop = $legTop + 24 - $b['h'] + $b['dy'];
         $headTop = $bodyTop + 24 - $h['h'] + $h['dy'];
 
