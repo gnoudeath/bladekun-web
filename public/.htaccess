@@ -1,0 +1,11 @@
+# Không cho xem danh sách file trong thư mục
+Options -Indexes
+
+# URL đẹp: chuyển mọi địa chỉ không phải file thật về index.php.
+# Chỉ có tác dụng khi bật mod_rewrite (XAMPP bật sẵn) VÀ đặt app.pretty_urls = true trong config/config.php.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>

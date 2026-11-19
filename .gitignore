@@ -1,0 +1,5 @@
+storage/*.log
+storage/cache/
+*.sqlite
+.DS_Store
+__pycache__/
