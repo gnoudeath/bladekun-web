@@ -145,3 +145,76 @@ function planet_scene($gender): string
 {
     return ['tree-earth', 'tree-namek', 'pod-xayda'][(int) $gender] ?? 'tree-earth';
 }
+
+// =====================================================================
+//  DIỄN ĐÀN: văn bản + biểu cảm + avatar + file đính kèm
+// =====================================================================
+
+/** URL công khai của file người dùng tải lên (đường dẫn lưu trong DB tính từ public/uploads). */
+function upload_url(string $path): string
+{
+    return base_url() . '/uploads/' . $path;
+}
+
+/**
+ * Biểu cảm dạng ảnh ("sticker"): mọi file .png/.gif/.webp trong public/assets/emoji/ đều dùng được.
+ * Muốn thêm biểu cảm mới: chép file vào thư mục đó (tên chỉ gồm a-z, 0-9, _ hoặc -), ví dụ "haha.png"
+ * rồi người dùng gõ :haha: là ra ảnh. Không cần sửa code.
+ * @return string[] danh sách tên (không có đuôi)
+ */
+function sticker_names(): array
+{
+    static $names = null;
+    if ($names === null) {
+        $names = [];
+        foreach (glob(ROOT_PATH . '/public/assets/emoji/*.{png,gif,webp}', GLOB_BRACE) ?: [] as $f) {
+            $n = pathinfo($f, PATHINFO_FILENAME);
+            if (preg_match('/^[a-z0-9_-]+$/', $n)) { $names[$n] = basename($f); }
+        }
+        ksort($names);
+    }
+    return $names;
+}
+
+/**
+ * Biến văn bản người dùng gõ thành HTML an toàn:
+ *   1. e()       : vô hiệu hoá mọi thẻ HTML/JS (chống XSS) – LUÔN làm đầu tiên;
+ *   2. :tên:     : thay bằng ảnh biểu cảm nếu tên có trong thư mục emoji (chỉ tên hợp lệ trong whitelist);
+ *   3. nl2br     : xuống dòng.
+ * Emoji Unicode (😀) là ký tự thường nên hiện luôn, không cần xử lý.
+ */
+function rich_text(?string $text): string
+{
+    $html = e($text);
+    $stickers = sticker_names();
+    if ($stickers) {
+        $html = preg_replace_callback('/:([a-z0-9_-]{1,30}):/', function ($m) use ($stickers) {
+            return isset($stickers[$m[1]])
+                ? '<img class="sticker" src="' . e(asset('emoji/' . $stickers[$m[1]])) . '" alt=":' . $m[1] . ':" title=":' . $m[1] . ':" width="28" height="28">'
+                : $m[0];
+        }, $html);
+    }
+    return nl2br($html, false);
+}
+
+/** "15 giờ trước", "19 ngày trước"... từ chuỗi ngày giờ trong DB. */
+function time_ago(?string $value): string
+{
+    $ts = $value ? strtotime($value) : 0;
+    if (!$ts) { return '—'; }
+    $d = max(0, time() - $ts);
+    if ($d < 60)       { return 'vừa xong'; }
+    if ($d < 3600)     { return floor($d / 60) . ' phút trước'; }
+    if ($d < 86400)    { return floor($d / 3600) . ' giờ trước'; }
+    if ($d < 86400 * 30) { return floor($d / 86400) . ' ngày trước'; }
+    return date('d/m/Y', $ts);
+}
+
+/**
+ * Avatar của người đăng = cái đầu nhân vật (cùng ảnh cắt từ game). Chưa có nhân vật / đầu chưa có ảnh => đầu mặc định theo hành tinh.
+ */
+function head_avatar($head, $gender): string
+{
+    $meta = CharacterModel::headMeta((int) $head, (int) $gender);
+    return $meta ? asset('img/' . $meta['f']) : asset('img/gem.png');
+}

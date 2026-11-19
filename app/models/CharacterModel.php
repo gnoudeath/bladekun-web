@@ -145,6 +145,13 @@ class CharacterModel extends Model
         return [[$mk($l, $legTop, 1), $mk($b, $bodyTop, 2), $mk($h, $headTop, 3)], $approx];
     }
 
+    /** Ảnh đầu (cho avatar diễn đàn): đầu thật nếu có ảnh, không thì đầu mặc định theo hành tinh. */
+    public static function headMeta(int $head, int $gender): ?array
+    {
+        $m = self::partsMeta()['head'] ?? [];
+        return $m[(string) $head] ?? $m[(string) (self::FALLBACK[$gender][0] ?? 64)] ?? null;
+    }
+
     /** parts.json: danh sách bộ phận đã cắt ảnh. Đọc một lần mỗi request. */
     private static function partsMeta(): array
     {

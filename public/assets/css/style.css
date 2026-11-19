@@ -400,3 +400,52 @@ div.planet-card:nth-child(1), .col-md-4:nth-child(1) > div.planet-card { backgro
 .eq-item__noicon { width: 40px; height: 40px; display: grid; place-items: center; font-weight: 800; opacity: .5; }
 .eq-item__name { font-size: .75rem; font-weight: 700; line-height: 1.15; overflow-wrap: anywhere; }
 .eq-item__type { font-size: .65rem; opacity: .65; }
+
+/* ===== Diễn đàn ===== */
+.forum-tabs { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; margin: 0 0 1rem; padding: .5rem .9rem;
+  background: #fffdf5; border: 3px solid #000; border-radius: 12px; box-shadow: 4px 4px 0 #000; }
+.forum-tab { font-weight: 800; color: #5a3b00; text-decoration: none; padding: .25rem .1rem; border-bottom: 3px solid transparent; }
+.forum-tab:hover { color: #d32f2f; }
+.forum-tab.is-active { color: #d32f2f; border-bottom-color: #d32f2f; }
+.forum-tabs__count { margin-left: auto; font-size: .85rem; opacity: .7; }
+.forum-list { display: grid; gap: 1rem; }
+.forum-post { position: relative; background: #fffdf5; color: #2b1d00; border: 3px solid #000; border-radius: 14px; box-shadow: 5px 5px 0 #000; padding: 1rem 1.1rem; }
+.forum-post--pinned { background: #fff3d6; }
+.forum-post__pin { position: absolute; top: -3px; right: 12px; background: #e53935; color: #fff; font-weight: 800; font-size: .75rem;
+  padding: .2rem .6rem; border: 3px solid #000; border-top: 0; border-radius: 0 0 8px 8px; }
+.forum-post__head { display: flex; gap: .75rem; align-items: center; margin-bottom: .6rem; }
+.forum-post__name.is-admin, .comment .is-admin { color: #d32f2f; }
+.forum-post__title { font-size: 1.15rem; font-weight: 800; margin: .25rem 0 .5rem; }
+.forum-post__title a { color: inherit; text-decoration: none; }
+.forum-post__title a:hover { text-decoration: underline; }
+.forum-post__body { overflow-wrap: anywhere; line-height: 1.5; }
+.forum-post__foot { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin-top: .8rem; padding-top: .7rem; border-top: 2px dashed rgba(0,0,0,.25); }
+.forum-post__stats { margin-left: auto; font-size: .8rem; opacity: .7; }
+.avatar { width: 48px; height: 48px; object-fit: contain; background: #ffe0b2; border: 2px solid #000; border-radius: 10px; padding: 2px; flex: none; }
+.avatar--sm { width: 36px; height: 36px; }
+.forum-btn { background: transparent; border: 2px solid transparent; border-radius: 8px; padding: .2rem .6rem; font-weight: 700; font-size: .9rem; color: #5a3b00; text-decoration: none; cursor: pointer; }
+.forum-btn:hover { background: rgba(0,0,0,.08); color: #000; }
+.forum-btn.is-on { color: #1565c0; background: rgba(21,101,192,.12); }
+.forum-btn--danger { color: #c62828; }
+.forum-btn--tiny { font-size: .75rem; padding: 0 .4rem; }
+.forum-media { margin-top: .6rem; }
+.forum-media img, .forum-media video { display: block; max-width: 100%; max-height: 520px; border: 3px solid #000; border-radius: 10px; background: #000; }
+.sticker { vertical-align: middle; }
+.comment { display: flex; gap: .7rem; padding: .7rem 0; border-bottom: 2px dashed rgba(0,0,0,.18); }
+.comment:last-of-type { border-bottom: 0; }
+.comment__main { min-width: 0; overflow-wrap: anywhere; }
+.composer textarea { resize: vertical; }
+.composer__bar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .6rem; }
+.composer__file { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.composer__error { color: #c62828; font-weight: 700; margin: .5rem 0 0; }
+.emoji-panel { display: flex; flex-wrap: wrap; gap: .15rem; margin-top: .5rem; padding: .5rem; max-height: 170px; overflow: auto;
+  background: #fff; border: 2px solid #000; border-radius: 10px; }
+.emoji-panel[hidden] { display: none; }
+.emoji-btn { background: transparent; border: 0; border-radius: 6px; font-size: 1.4rem; line-height: 1; padding: .2rem .3rem; cursor: pointer; }
+.emoji-btn:hover { background: #ffe0b2; }
+
+/* Menu có thêm mục "Diễn đàn": thu gọn khoảng cách ở màn hình vừa để không bị tràn dòng */
+@media (min-width: 992px) and (max-width: 1250px) {
+  .site-nav .nav-link { padding-left: .5rem; padding-right: .5rem; font-size: .9rem; }
+  .site-nav .btn-comic { padding-left: .7rem; padding-right: .7rem; }
+}

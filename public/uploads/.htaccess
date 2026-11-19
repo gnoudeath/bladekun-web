@@ -1,0 +1,8 @@
+# Thư mục chứa file người dùng tải lên: TUYỆT ĐỐI không cho chạy PHP ở đây
+Options -Indexes -ExecCGI
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<FilesMatch "\.(php|phtml|phar|php[0-9])$">
+    Require all denied
+</FilesMatch>

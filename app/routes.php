@@ -24,6 +24,15 @@ return [
     'GET /news/view'   => ['NewsController',     'show'],
     'GET /download'    => ['DownloadController', 'index'],
 
+    // Diễn đàn (xem: ai cũng xem được; đăng/bình luận/thích: phải đăng nhập)
+    'GET /forum'          => ['ForumController', 'index'],
+    'GET /forum/post'     => ['ForumController', 'show'],
+    'POST /forum/post'    => ['ForumController', 'create'],
+    'POST /forum/comment' => ['ForumController', 'comment'],
+    'POST /forum/like'    => ['ForumController', 'like'],
+    'POST /forum/delete'  => ['ForumController', 'delete'],
+    'POST /forum/pin'     => ['ForumController', 'pin'],
+
     // Đăng ký / đăng nhập / đăng xuất
     'GET /register'    => ['AuthController',     'showRegister'],
     'POST /register'   => ['AuthController',     'register'],

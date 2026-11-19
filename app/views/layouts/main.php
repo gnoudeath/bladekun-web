@@ -14,6 +14,7 @@ $menu = [
     'rank'     => 'Xếp hạng',
     'clans'    => 'Bang hội',
     'news'     => 'Tin tức',
+    'forum'    => 'Diễn đàn',
     'download' => 'Tải game',
 ];
 // Nhóm "Thông tin" (menu thả xuống): các trang chữ tĩnh

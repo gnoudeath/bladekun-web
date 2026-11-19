@@ -77,6 +77,17 @@ return [
     ],
 
     // ---------------------------------------------------------------
+    // Diễn đàn (cần chạy database/forum.sql một lần)
+    // ---------------------------------------------------------------
+    'forum' => [
+        'cooldown_seconds' => 30,     // mỗi tài khoản phải chờ bấy nhiêu giây giữa hai lần gửi (bài hoặc bình luận)
+        'max_upload_mb'    => 4,      // dung lượng tối đa ảnh/video đính kèm
+        'max_content'      => 2000,   // số ký tự tối đa của một bài/bình luận
+        'max_title'        => 100,
+        'per_page'         => 10,     // số bài mỗi trang
+    ],
+
+    // ---------------------------------------------------------------
     // Trang "Tải game" (chỉ để hiển thị, web không kết nối tới game server)
     // ---------------------------------------------------------------
     'download' => [
