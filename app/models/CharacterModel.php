@@ -140,11 +140,11 @@ class CharacterModel extends Model
         $left = (int) (self::STAGE_W / 2 - self::ANCHOR_X);
         $legTop  = self::STAGE_H - self::BOTTOM_GAP - $l['h'] + $l['dy'];
         $bodyTop = $legTop + 24 - $b['h'] + $b['dy'];
-        $headTop = $bodyTop + 24 - $h['h'] + $h['dy'];
+        $headTop = $bodyTop + 11 - $h['h'] + $h['dy'];
 
         $mk = fn(array $p, int $top, int $z) => [
             'src' => asset('img/' . $p['f']), 'w' => $p['w'], 'h' => $p['h'],
-            'left' => $left + $p['dx'], 'top' => $top, 'z' => $z,
+            'left' => $left + $p['dx'] + ($z === 3 ? -13 : 2), 'top' => $top, 'z' => $z,
         ];
         return [[$mk($l, $legTop, 1), $mk($b, $bodyTop, 2), $mk($h, $headTop, 3)], $approx];
     }
