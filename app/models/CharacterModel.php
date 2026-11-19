@@ -32,6 +32,8 @@ class CharacterModel extends Model
     /** Kích thước khung hiển thị (px) – CSS .char-stage phải khớp. */
     public const STAGE_W = 240;
     public const STAGE_H = 250;
+    /** Mốc ngang chung của đầu/thân/chân tính từ giữa khung (px, ảnh zoom x4). */
+    private const ANCHOR_X = 46;
 
     private static ?array $partsMeta = null;
 
@@ -129,18 +131,17 @@ class CharacterModel extends Model
             return [[], true];    // chưa chạy tools/build_sprites.py
         }
 
-        // Xếp từ dưới lên: chân chạm đáy khung; thân đè lên chân 24px; đầu đè lên thân 32px (số đo thử cho đẹp)
-        $cx = self::STAGE_W / 2;
-        $legBottom = self::STAGE_H - 6;
-        $legTop = $legBottom - $l['h'] + $l['dy'];
-        $bodyBottom = $legTop + 24;
-        $bodyTop = $bodyBottom - $b['h'] + $b['dy'];
-        $headBottom = $bodyTop + 32;
-        $headTop = $headBottom - $h['h'] + $h['dy'];
+        // Xếp từ dưới lên. Cả 3 mảnh dùng CHUNG một mốc ngang (cx - ANCHOR_X) rồi cộng độ lệch dx riêng của từng mảnh
+        // (đúng như game: dx/dy là vị trí góc trên-trái của mảnh so với mốc chung, KHÔNG căn giữa theo bề rộng ảnh –
+        // căn giữa làm đầu lệch khỏi thân). Theo chiều dọc: thân đè lên chân 24px, đầu đè lên thân 24px (ảnh zoom x4).
+        $left = (int) (self::STAGE_W / 2 - self::ANCHOR_X);
+        $legTop  = self::STAGE_H - 6 - $l['h'] + $l['dy'];
+        $bodyTop = $legTop + 24 - $b['h'] + $b['dy'];
+        $headTop = $bodyTop + 24 - $h['h'] + $h['dy'];
 
         $mk = fn(array $p, int $top, int $z) => [
             'src' => asset('img/' . $p['f']), 'w' => $p['w'], 'h' => $p['h'],
-            'left' => (int) round($cx - $p['w'] / 2 + $p['dx']), 'top' => $top, 'z' => $z,
+            'left' => $left + $p['dx'], 'top' => $top, 'z' => $z,
         ];
         return [[$mk($l, $legTop, 1), $mk($b, $bodyTop, 2), $mk($h, $headTop, 3)], $approx];
     }
