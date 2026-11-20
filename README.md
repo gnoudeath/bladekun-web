@@ -433,3 +433,18 @@ Nếu gặp lỗi khi chạy trên máy bạn, gửi mình thông báo lỗi (b�
 - Avatar người đăng = đầu nhân vật (cắt từ game); tên hiển thị = tên nhân vật, chưa có nhân vật thì dùng tên đăng nhập.
 - Lưu ý PHP: nếu `upload_max_filesize` / `post_max_size` trong `php.ini` nhỏ hơn 4MB thì file bị từ chối (XAMPP mặc định đủ lớn).
 - Chưa có (gợi ý sau): chat thời gian thực (WebSocket), sửa bài, báo cáo vi phạm, thông báo, chuyên mục.
+
+## Ảnh gốc lấy thẳng từ server game (và thư mục ảnh bổ sung)
+
+Web và server game dùng chung database nên mọi id (icon trang bị, avatar `head_avatar`...) đều khớp. Web **không copy ảnh** mà đọc thẳng
+`<thư mục game>/resources/normal/image/4/icon/<id>.png` qua địa chỉ `?r=media&id=<số>` (`MediaController` + `app/core/GameAssets.php`).
+
+- Cấu hình trong `config/config.php`, mục `assets`:
+  - `game_path`: đường dẫn thư mục game, ví dụ `'D:/Nro-Online'`. Để `null` thì web tự tìm thư mục **cùng cấp**: `../Nro-Online` hoặc `../nro-online`
+    (ví dụ `C:/xampp/htdocs/bladekun-web` và `C:/xampp/htdocs/Nro-Online`).
+  - `zoom`: 1–4 (mặc định 4, nét nhất).
+- **Game không có ảnh** => web tìm ở `public/assets/extra/icon/<id>.png`. Đây là thư mục để bạn tự thêm ảnh cho thứ server không có
+  (xem `public/assets/extra/README.txt`). Chép file vào là dùng, không cần sửa code. Sẵn có 422 icon cũ trong đó, dùng khi web chạy ở máy không có thư mục game.
+- Avatar (diễn đàn, v.v.) = chân dung chính thức theo bảng `head_avatar` của game; đầu nào chưa có thì dùng đầu ghép từ sprite.
+- An toàn: id luôn ép thành số nguyên, chỉ đọc đúng thư mục `icon`, không cho đọc file tuỳ ý. Có ETag/Cache 1 ngày nên không nặng máy.
+- Chưa làm: hình ghép đầy đủ đầu/thân/chân cho trang phục mà game không có ảnh sprite (xem mục Hình nhân vật ở trên).

@@ -5,7 +5,6 @@
  * Dùng chung cho trang "Tài khoản của tôi" và hồ sơ công khai.
  * Mọi chuỗi từ database đều đi qua e() để tránh chèn mã HTML/JS.
  */
-$iconDir = ROOT_PATH . '/public/assets/img/icons/';
 ?>
 <div class="char-card">
     <div class="char-stage" style="width:<?= CharacterModel::STAGE_W ?>px;height:<?= CharacterModel::STAGE_H ?>px" aria-label="Hình nhân vật">
@@ -23,11 +22,11 @@ $iconDir = ROOT_PATH . '/public/assets/img/icons/';
     <?php if ($look['equipment']): ?>
         <ul class="eq-grid">
             <?php foreach ($look['equipment'] as $it):
-                $hasIcon = is_file($iconDir . (int) $it['icon'] . '.png');
+                $hasIcon = icon_exists((int) $it['icon']);
                 $tip = $it['name'] . ($it['options'] ? "\n" . implode("\n", $it['options']) : ''); ?>
                 <li class="eq-item" title="<?= e($tip) ?>" tabindex="0">
                     <?php if ($hasIcon): ?>
-                        <img src="<?= e(asset('img/icons/' . (int) $it['icon'] . '.png')) ?>" alt="" width="40" height="40">
+                        <img src="<?= e(icon_url((int) $it['icon'])) ?>" alt="" width="40" height="40">
                     <?php else: ?><span class="eq-item__noicon">?</span><?php endif; ?>
                     <span class="eq-item__name"><?= e($it['name']) ?></span>
                     <span class="eq-item__type"><?= e($it['type_label']) ?></span>

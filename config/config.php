@@ -77,6 +77,16 @@ return [
     ],
 
     // ---------------------------------------------------------------
+    // Ảnh gốc của game: web đọc THẲNG từ thư mục server game (dùng chung database nên id khớp nhau)
+    'assets' => [
+        // Đường dẫn tới thư mục project game (có thư mục resources/ bên trong).
+        // null = tự tìm thư mục cùng cấp: ../Nro-Online hoặc ../nro-online. Hoặc ghi rõ, ví dụ 'D:/Nro-Online'.
+        'game_path' => null,
+        // Mức zoom của ảnh (1-4). 4 = nét nhất.
+        'zoom'      => 4,
+        // Game không có ảnh nào thì web tìm ở public/assets/extra/icon/<id>.png (bạn tự thêm).
+    ],
+
     // Diễn đàn (cần chạy database/forum.sql một lần)
     // ---------------------------------------------------------------
     'forum' => [

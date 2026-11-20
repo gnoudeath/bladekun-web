@@ -210,11 +210,27 @@ function time_ago(?string $value): string
     return date('d/m/Y', $ts);
 }
 
+/** Địa chỉ ảnh icon của game (do MediaController trả về). Dùng icon_exists() để biết có ảnh hay không. */
+function icon_url(int $id): string
+{
+    return url('media', ['id' => $id]);
+}
+
+function icon_exists(int $id): bool
+{
+    return GameAssets::iconPath($id) !== null;
+}
+
 /**
- * Avatar của người đăng = cái đầu nhân vật (cùng ảnh cắt từ game). Chưa có nhân vật / đầu chưa có ảnh => đầu mặc định theo hành tinh.
+ * Avatar của người đăng. Thứ tự: chân dung chính thức trong game (bảng head_avatar + thư mục icon của game)
+ * -> đầu ghép từ sprite (nếu có) -> ảnh mặc định.
  */
 function head_avatar($head, $gender): string
 {
+    $avatar = AvatarModel::avatarId((int) $head);
+    if ($avatar !== null && icon_exists($avatar)) {
+        return icon_url($avatar);
+    }
     $meta = CharacterModel::headMeta((int) $head, (int) $gender);
     return $meta ? asset('img/' . $meta['f']) : asset('img/gem.png');
 }

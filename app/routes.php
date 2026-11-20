@@ -23,6 +23,7 @@ return [
     'GET /news'        => ['NewsController',     'index'],
     'GET /news/view'   => ['NewsController',     'show'],
     'GET /download'    => ['DownloadController', 'index'],
+    'GET /media'       => ['MediaController',    'icon'],   // ảnh icon lấy thẳng từ thư mục game
 
     // Diễn đàn (xem: ai cũng xem được; đăng/bình luận/thích: phải đăng nhập)
     'GET /forum'          => ['ForumController', 'index'],

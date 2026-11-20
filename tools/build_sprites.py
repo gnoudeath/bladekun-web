@@ -51,7 +51,7 @@ def main():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     out_img = os.path.join(root, 'public/assets/img')
     os.makedirs(out_img + '/parts', exist_ok=True)
-    os.makedirs(out_img + '/icons', exist_ok=True)
+    os.makedirs(root + '/public/assets/extra/icon', exist_ok=True)
 
     g = a.game
     ents = load_image_table(f'{g}/resources/data/nro/update_data/image')
@@ -91,7 +91,7 @@ def main():
     for icon in sorted(ids):
         src = f'{g}/resources/normal/image/4/icon/{icon}.png'
         if os.path.exists(src):
-            shutil.copy(src, f'{out_img}/icons/{icon}.png'); n += 1
+            shutil.copy(src, f'{root}/public/assets/extra/icon/{icon}.png'); n += 1
     print(f'Đã copy {n}/{len(ids)} icon')
 
 
