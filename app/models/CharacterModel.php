@@ -154,7 +154,9 @@ class CharacterModel extends Model
             'src' => self::partSrc($p), 'w' => $p['w'], 'h' => $p['h'],
             'left' => $left + $p['dx'] + ($z === 3 ? -13 : 2), 'top' => $top, 'z' => $z,
         ];
-        return [[$mk($l, $legTop, 1), $mk($b, $bodyTop, 2), $mk($h, $headTop, 3)], $approx];
+        // Thân là áo giáp rời (trang phục mới): vẽ áo ĐÈ LÊN đầu để tóc dài không che mất áo. Thân cơ bản thì đầu đè lên thân như game.
+        $bodyZ = isset($b['i']) ? 4 : 2;
+        return [[$mk($l, $legTop, 1), $mk($b, $bodyTop, $bodyZ), $mk($h, $headTop, 3)], $approx];
     }
 
     /** Đường dẫn ảnh của một mảnh: ảnh đã cắt sẵn ('f') hoặc ảnh rời trong thư mục game ('i' = id icon). */
