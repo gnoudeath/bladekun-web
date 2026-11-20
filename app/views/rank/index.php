@@ -54,7 +54,7 @@ $unit  = $types[$type]['unit'];
                         <td class="rank-name"><a class="player-link" href="<?= e(url('player', ['id' => $p['id']])) ?>"><?= e($p['name']) ?></a></td>
                         <td class="col-planet d-none d-sm-table-cell"><span class="comic-tag"><?= e(PlayerModel::planetName($p['gender'])) ?></span></td>
                         <td class="num">
-                            <?= e(format_number($p['score'])) ?>
+                            <?= e($p['score_text'] ?? format_number($p['score'])) ?>
                             <div class="progress power-bar" role="img" aria-label="<?= $percent ?> phần trăm so với người đứng đầu"><div class="progress-bar" style="width: <?= $percent ?>%"></div></div>
                         </td>
                     </tr>
@@ -62,7 +62,7 @@ $unit  = $types[$type]['unit'];
                 </tbody>
             </table>
         </div>
-        <p class="small text-body-secondary mt-3 mb-0">Cột <strong><?= e($label) ?></strong> tính theo <?= e($unit) ?>; dữ liệu cập nhật khi game lưu nhân vật.<?php $min = PlayerModel::rankMin($type); if ($min > 0): ?> Cần đạt tối thiểu <strong><?= e(format_number($min)) ?></strong> mới được vào bảng.<?php endif; ?></p>
+        <p class="small text-body-secondary mt-3 mb-0">Cột <strong><?= e($label) ?></strong> tính theo <?= e($unit) ?>; dữ liệu cập nhật khi game lưu nhân vật.<?php if (!empty($types[$type]['note'])): ?> <?= e($types[$type]['note']) ?><?php endif; ?><?php $min = PlayerModel::rankMin($type); if ($min > 0): ?> Cần đạt tối thiểu <strong><?= e(format_number($min)) ?></strong> mới được vào bảng.<?php endif; ?></p>
     <?php else: ?>
         <div class="empty">
             <span class="display-title">Chưa có ai!</span>

@@ -17,8 +17,14 @@ class PlayerModel extends Model
      */
     public const RANK_TYPES = [
         'power' => ['col' => 'p.power',      'label' => 'Sức mạnh',   'unit' => 'sức mạnh'],
+        // Sức đánh / HP / Ki: đọc từ player.data_point (JSON). 'point' = vị trí trong mảng (5 = HP gốc, 6 = Ki gốc, 7 = sức đánh gốc).
+        'dame'  => ['point' => 7, 'label' => 'Sức đánh', 'unit' => 'sức đánh gốc', 'note' => 'Tính theo chỉ số gốc (chưa cộng trang bị).'],
+        'hp'    => ['point' => 5, 'label' => 'HP',       'unit' => 'HP gốc',       'note' => 'Tính theo chỉ số gốc (chưa cộng trang bị).'],
+        'ki'    => ['point' => 6, 'label' => 'Ki',       'unit' => 'Ki gốc',       'note' => 'Tính theo chỉ số gốc (chưa cộng trang bị).'],
         'pet'   => ['col' => 'p.pet_power',  'label' => 'Đệ tử',      'unit' => 'sức mạnh đệ tử'],
         'boss'  => ['col' => 'p.kill_boss',  'label' => 'Diệt boss',  'unit' => 'boss đã hạ'],
+        // Nhiệm vụ: đọc từ player.data_task = [số lần/tiến độ, nhiệm vụ chính, bước nhỏ] (giống Top Nhiệm Vụ trong game)
+        'task'  => ['task' => true, 'label' => 'Nhiệm vụ', 'unit' => 'nhiệm vụ đang làm', 'note' => 'Xếp theo nhiệm vụ chính, rồi bước nhỏ, rồi tiến độ.'],
         'topup' => ['col' => 'p.tong_nap',   'label' => 'Top nạp',    'unit' => 'tổng nạp'],
     ];
 
@@ -71,6 +77,9 @@ class PlayerModel extends Model
     {
         $types = self::rankTypes();
         $type = isset($types[$type]) ? $type : 'power';
+        if (isset($types[$type]['point']) || isset($types[$type]['task'])) {
+            return $this->topFromJson($types[$type], $limit);
+        }
         $col = $types[$type]['col'];   // chỉ lấy tên cột từ whitelist
         return $this->fetchAll(
             'SELECT p.id, p.name, p.power, p.gender, ' . $col . ' AS score
@@ -81,6 +90,42 @@ class PlayerModel extends Model
              LIMIT ?',
             [self::rankMin($type), $limit]
         );
+    }
+
+    /**
+     * Top dựa trên cột JSON (data_point / data_task). Đọc danh sách nhân vật hiển thị được rồi tự tính ở PHP
+     * (chạy được trên mọi loại database, không cần hàm JSON của MySQL). Giới hạn đọc 5000 dòng mạnh nhất cho nhẹ.
+     */
+    private function topFromJson(array $type, int $limit): array
+    {
+        $rows = $this->fetchAll(
+            'SELECT p.id, p.name, p.power, p.gender, p.data_point, p.data_task
+             FROM player p
+             JOIN account a ON a.id = p.account_id
+             WHERE ' . $this->visibleCondition() . '
+             ORDER BY p.power DESC, p.id ASC
+             LIMIT 5000'
+        );
+        $out = [];
+        foreach ($rows as $r) {
+            if (isset($type['task'])) {
+                $t = json_decode((string) $r['data_task'], true);
+                if (!is_array($t)) { continue; }
+                $count = (int) ($t[0] ?? 0); $main = (int) ($t[1] ?? 0); $step = (int) ($t[2] ?? 0);
+                $r['score'] = $main;
+                $r['score_text'] = 'NV ' . $main . ' · bước ' . $step . ' (' . $count . ')';
+                $r['_sort'] = [$main, $step, $count];
+            } else {
+                $d = json_decode((string) $r['data_point'], true);
+                $v = is_array($d) ? (int) ($d[$type['point']] ?? 0) : 0;
+                $r['score'] = $v;
+                $r['_sort'] = [$v];
+            }
+            unset($r['data_point'], $r['data_task']);
+            if ($r['score'] > 0) { $out[] = $r; }
+        }
+        usort($out, fn($a, $b) => [$b['_sort'], $b['power'], $a['id']] <=> [$a['_sort'], $a['power'], $b['id']]);
+        return array_slice($out, 0, $limit);
     }
 
     /**
