@@ -26,6 +26,9 @@ class CharacterModel extends Model
         27 => 'Phụ kiện', 32 => 'Phụ kiện',
     ];
 
+    /** Chỉ hiện các loại này trong ô "Trang bị đang mặc" (0 áo, 1 quần, 3 giày). Thêm số TYPE vào đây nếu muốn hiện thêm (2 găng, 4 rada...). */
+    private const SHOW_TYPES = [0, 1, 3];
+
     /** Bộ đồ cơ bản theo hành tinh (đã có ảnh trong file game): [đầu, thân, chân]. */
     private const FALLBACK = [0 => [64, 14, 15], 1 => [9, 10, 11], 2 => [6, 16, 17]];
 
@@ -74,6 +77,9 @@ class CharacterModel extends Model
                 if ($name !== null) {
                     $opts[] = str_replace('#', number_format((int) $o[1], 0, ',', '.'), $name);
                 }
+            }
+            if (!in_array($type, self::SHOW_TYPES, true)) {
+                continue;   // vẫn dùng để vẽ nhân vật ở trên, chỉ không liệt kê trong ô trang bị
             }
             $equipment[] = [
                 'name'       => $t['name'],
