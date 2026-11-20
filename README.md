@@ -448,3 +448,9 @@ Web và server game dùng chung database nên mọi id (icon trang bị, avatar 
 - Avatar (diễn đàn, v.v.) = chân dung chính thức theo bảng `head_avatar` của game; đầu nào chưa có thì dùng đầu ghép từ sprite.
 - An toàn: id luôn ép thành số nguyên, chỉ đọc đúng thư mục `icon`, không cho đọc file tuỳ ý. Có ETag/Cache 1 ngày nên không nặng máy.
 - Chưa làm: hình ghép đầy đủ đầu/thân/chân cho trang phục mà game không có ảnh sprite (xem mục Hình nhân vật ở trên).
+
+## Giao diện
+
+Giao diện tối hiện đại (nền xanh đêm, thẻ bo tròn, điểm nhấn cam–vàng) viết trên Bootstrap 5.3 chế độ tối.
+Muốn đổi màu cả web: sửa các biến ở mục "1. BIẾN MÀU & FONT" đầu file `public/assets/css/style.css`.
+(Các class cũ như `.btn-comic`, `.display-title` được giữ tên để các trang không phải sửa.)

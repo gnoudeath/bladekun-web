@@ -4,7 +4,7 @@
  * Biến có sẵn: $content (HTML của trang con), $title (tiêu đề trang, có thể null).
  *
  * Giao diện = Bootstrap 5 (khung lưới, thanh menu, form, bảng, nút) + public/assets/css/style.css
- * (lớp "da truyện tranh" phủ lên trên Bootstrap: viền đen, bóng đổ cứng, tia sáng, chấm bán tông).
+ * (giao diện tối hiện đại phủ lên trên Bootstrap, dùng chế độ tối data-bs-theme="dark" của Bootstrap 5.3).
  */
 $pageTitle = !empty($title) ? $title . ' – ' . config('app.name') : config('app.name') . ' – ' . config('app.tagline');
 
@@ -27,21 +27,21 @@ $infoActive = false;
 foreach ($infoMenu as $p => $_) { $infoActive = $infoActive || is_current($p); }
 ?>
 <!doctype html>
-<html lang="vi">
+<html lang="vi" data-bs-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($pageTitle) ?></title>
     <meta name="description" content="<?= e(config('app.tagline')) ?>">
-    <meta name="theme-color" content="#1d3fa8">
+    <meta name="theme-color" content="#0a0f1f">
 
     <!-- Bootstrap 5.3 (CSS) từ CDN. Cần mạng; nếu muốn chạy offline, tải file về public/assets/vendor/ rồi đổi đường dẫn. -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" crossorigin="anonymous">
-    <!-- Font: Bangers (chữ truyện tranh) + Be Vietnam Pro (chữ nội dung, hỗ trợ tiếng Việt). -->
+    <!-- Font Be Vietnam Pro (đẹp, hỗ trợ đầy đủ tiếng Việt). -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- Giao diện truyện tranh của riêng web: PHẢI nằm SAU Bootstrap để ghi đè được -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Giao diện riêng của web (tối, hiện đại): PHẢI nằm SAU Bootstrap để ghi đè được -->
     <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
 </head>
 <body>
@@ -112,14 +112,7 @@ foreach ($infoMenu as $p => $_) { $infoActive = $infoActive || is_current($p); }
         </div>
     </main>
 
-    <!-- ============ DẢI CẢNH: cây, nhà, phi thuyền, toà tháp... (ảnh nền map của game) đứng trên mặt đất ============ -->
-    <div class="scenery" aria-hidden="true">
-        <?php foreach (['tree-earth', 'house-earth', 'palm', 'dome-namek', 'tree-namek', 'tower-b', 'pagoda', 'pod-xayda', 'tree-round'] as $i => $n): ?>
-            <?= scene($n, 'scenery__item' . ($i > 3 && $i % 2 ? ' d-none d-md-block' : '')) ?>
-        <?php endforeach; ?>
-    </div>
-
-    <!-- ============ CHÂN TRANG: dải đồi cỏ lấy từ ảnh nền của game ============ -->
+    <!-- ============ CHÂN TRANG ============ -->
     <footer class="site-footer">
         <div class="container py-4">
             <div class="row g-4">
