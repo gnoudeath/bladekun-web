@@ -54,7 +54,7 @@ $neverLoggedIn = ($account['last_time_login'] === AccountModel::NEVER_LOGGED_IN)
                 </div>
                 <dl class="kv mt-3">
                     <dt>Sức mạnh</dt><dd><strong><?= e(format_number($player['power'])) ?></strong></dd>
-                    <dt>Hạng</dt><dd>#<?= (int) $rank ?> <a href="<?= e(url('rank')) ?>">(xem bảng xếp hạng)</a></dd>
+                    <dt>Hạng</dt><dd><?= $rank > 0 ? '#' . (int) $rank : 'Chưa vào bảng' ?> <a href="<?= e(url('rank')) ?>">(xem bảng xếp hạng)</a></dd>
                     <dt>Sức mạnh đệ tử</dt><dd><?= e(format_number($player['pet_power'])) ?></dd>
                 </dl>
                 <?php View::partial('character', ['look' => $look]); ?>

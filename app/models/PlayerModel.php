@@ -32,6 +32,13 @@ class PlayerModel extends Model
         return $types;
     }
 
+    /** Mức tối thiểu để được vào bảng của một loại (0 = không giới hạn). Cấu hình ở config game.rank_min_power / rank_min_pet_power. */
+    public static function rankMin(string $type): int
+    {
+        $key = ['power' => 'rank_min_power', 'pet' => 'rank_min_pet_power'][$type] ?? null;
+        return $key ? max(0, (int) config('game.' . $key, 0)) : 0;
+    }
+
     public static function planetName($gender): string
     {
         return self::PLANETS[(int) $gender] ?? '???';
@@ -49,10 +56,10 @@ class PlayerModel extends Model
             'SELECT p.id, p.name, p.power, p.gender
              FROM player p
              JOIN account a ON a.id = p.account_id
-             WHERE ' . $this->visibleCondition() . '
+             WHERE ' . $this->visibleCondition() . ' AND p.power >= ?
              ORDER BY p.power DESC, p.id ASC
              LIMIT ?',
-            [$limit]
+            [self::rankMin('power'), $limit]
         );
     }
 
@@ -63,15 +70,16 @@ class PlayerModel extends Model
     public function topBy(string $type, int $limit): array
     {
         $types = self::rankTypes();
-        $col = ($types[$type] ?? $types['power'])['col'];   // chỉ lấy tên cột từ whitelist
+        $type = isset($types[$type]) ? $type : 'power';
+        $col = $types[$type]['col'];   // chỉ lấy tên cột từ whitelist
         return $this->fetchAll(
             'SELECT p.id, p.name, p.power, p.gender, ' . $col . ' AS score
              FROM player p
              JOIN account a ON a.id = p.account_id
-             WHERE ' . $this->visibleCondition() . '
+             WHERE ' . $this->visibleCondition() . ' AND ' . $col . ' >= ?
              ORDER BY ' . $col . ' DESC, p.power DESC, p.id ASC
              LIMIT ?',
-            [$limit]
+            [self::rankMin($type), $limit]
         );
     }
 
@@ -124,10 +132,13 @@ class PlayerModel extends Model
     /** Hạng của một mức sức mạnh = số người mạnh hơn + 1 (cùng điều kiện lọc với bảng xếp hạng). */
     public function rankOf(int $power): int
     {
-        return 1 + (int) $this->fetchValue(
+        if ($power < self::rankMin('power')) {
+            return 0;   // chưa đủ sức mạnh tối thiểu => chưa có hạng
+        }
+        return 1 + (int)  $this->fetchValue(
             'SELECT COUNT(*) FROM player p JOIN account a ON a.id = p.account_id
-             WHERE ' . $this->visibleCondition() . ' AND p.power > ?',
-            [$power]
+             WHERE ' . $this->visibleCondition() . ' AND p.power >= ? AND p.power > ?',
+            [self::rankMin('power'), $power]
         );
     }
 

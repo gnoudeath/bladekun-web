@@ -60,6 +60,11 @@ return [
         // Bảng xếp hạng có ẩn nhân vật của tài khoản admin / bị khoá không?
         'rank_hide_admins' => true,
 
+        // Sức mạnh tối thiểu để được vào bảng xếp hạng (0 = không giới hạn).
+        // Người chưa đạt mức này sẽ không hiện trong Top sức mạnh / Top đệ tử (và trang chủ).
+        'rank_min_power'     => 10000000000,   // 10 tỉ – Top sức mạnh
+        'rank_min_pet_power' => 10000000000,   // 10 tỉ – Top đệ tử (sức mạnh đệ tử)
+
         // news_posts.status nào được coi là "đã đăng"? (kiểm tra trong database của bạn)
         'news_published_status' => 1,
 

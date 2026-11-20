@@ -62,11 +62,11 @@ $unit  = $types[$type]['unit'];
                 </tbody>
             </table>
         </div>
-        <p class="small text-body-secondary mt-3 mb-0">Cột <strong><?= e($label) ?></strong> tính theo <?= e($unit) ?>; dữ liệu cập nhật khi game lưu nhân vật.</p>
+        <p class="small text-body-secondary mt-3 mb-0">Cột <strong><?= e($label) ?></strong> tính theo <?= e($unit) ?>; dữ liệu cập nhật khi game lưu nhân vật.<?php $min = PlayerModel::rankMin($type); if ($min > 0): ?> Cần đạt tối thiểu <strong><?= e(format_number($min)) ?></strong> mới được vào bảng.<?php endif; ?></p>
     <?php else: ?>
         <div class="empty">
             <span class="display-title">Chưa có ai!</span>
-            Chưa có chiến binh nào trên bảng. Vào game, tạo nhân vật và trở thành người đầu tiên!
+            Chưa có chiến binh nào đủ điều kiện vào bảng<?php $min = PlayerModel::rankMin($type); if ($min > 0): ?> (cần tối thiểu <?= e(format_number($min)) ?>)<?php endif; ?>. Hãy luyện tập và trở thành người đầu tiên!
         </div>
     <?php endif; ?>
 </section>

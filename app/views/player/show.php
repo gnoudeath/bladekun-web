@@ -17,7 +17,7 @@ $planet = PlayerModel::planetName($p['gender']);
             <h2 class="panel__title" id="pl-planet">Hành tinh <?= e($planet) ?></h2>
             <div class="planet-stage planet-stage--<?= (int) $p['gender'] ?>">
                 <?= scene(planet_scene($p['gender']), 'planet-stage__img') ?>
-                <span class="rank-stamp" title="Hạng sức mạnh"><small>Hạng</small><?= (int) $rank ?></span>
+                <span class="rank-stamp" title="Hạng sức mạnh"><small>Hạng</small><?= $rank > 0 ? (int) $rank : '–' ?></span>
             </div>
             <?php View::partial('character', ['look' => $look]); ?>
         </section>
@@ -32,7 +32,7 @@ $planet = PlayerModel::planetName($p['gender']);
             </div>
             <dl class="kv">
                 <dt>Hành tinh</dt><dd><span class="comic-tag comic-tag--blue"><?= e($planet) ?></span></dd>
-                <dt>Hạng sức mạnh</dt><dd>#<?= (int) $rank ?> <a href="<?= e(url('rank')) ?>">(xem bảng xếp hạng)</a></dd>
+                <dt>Hạng sức mạnh</dt><dd><?= $rank > 0 ? '#' . (int) $rank : 'Chưa vào bảng' ?> <a href="<?= e(url('rank')) ?>">(xem bảng xếp hạng)</a></dd>
                 <dt>Bang hội</dt>
                 <dd>
                     <?php if ($clan): ?>
