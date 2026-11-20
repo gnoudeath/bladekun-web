@@ -78,10 +78,10 @@
       fileName.textContent = f.name + ' (' + (f.size / 1048576).toFixed(1) + 'MB)';
     });
 
-    // ---- đếm ngược 30 giây
+    // ---- đếm ngược thời gian chờ (đăng bài 5 phút, bình luận 15 giây)
     var wait = parseInt(form.dataset.wait, 10) || 0;
     function tick() {
-      if (wait > 0) { submit.disabled = true; submit.textContent = 'Chờ ' + wait + 's'; wait--; setTimeout(tick, 1000); }
+      if (wait > 0) { submit.disabled = true; submit.textContent = 'Chờ ' + (wait >= 60 ? Math.floor(wait / 60) + ':' + ('0' + (wait % 60)).slice(-2) : wait + 's'); wait--; setTimeout(tick, 1000); }
       else { submit.disabled = false; submit.textContent = label; }
     }
     tick();

@@ -426,7 +426,7 @@ Nếu gặp lỗi khi chạy trên máy bạn, gửi mình thông báo lỗi (b�
 - Cài đặt: chạy **một lần** `database/forum.sql` trong Navicat (tạo 3 bảng mới `forum_posts`, `forum_comments`, `forum_likes`; không đụng bảng game).
 - Địa chỉ: `?r=forum` (danh sách + tab *Tất cả / Bài của tôi / Bài của Admin* + phân trang), `?r=forum/post&id=…` (bài + bình luận).
 - Code: `ForumController`, `ForumModel`, `Upload` (tải file an toàn), views `app/views/forum/` + partial `forum_post`, `forum_composer`, `forum_media`, JS cuối `public/assets/js/app.js`.
-- Quy tắc (đổi trong `config/config.php`, mục `forum`): **30 giây** giữa hai lần gửi (kiểm tra ở server theo thời điểm gửi gần nhất, không né được bằng F5), ảnh/video tối đa **4MB**, bài/bình luận tối đa 2000 ký tự.
+- Quy tắc (đổi trong `config/config.php`, mục `forum`): **5 phút** giữa hai bài viết và **15 giây** giữa hai bình luận (`post_cooldown_seconds`, `comment_cooldown_seconds`) (kiểm tra ở server theo thời điểm gửi gần nhất, không né được bằng F5), ảnh/video tối đa **4MB**, bài/bình luận tối đa 2000 ký tự.
 - Ảnh: jpg/png/gif/webp. Video: mp4/webm. Server kiểm tra loại file THẬT (không tin đuôi file), lưu tên ngẫu nhiên, thư mục `public/uploads` tắt chạy PHP.
 - Phân quyền: ai cũng xem; đăng/bình luận/thích cần đăng nhập (tài khoản bị khoá thì không); chỉ chủ bài hoặc admin được xoá; chỉ admin (`account.is_admin = 1`) được ghim.
 - Biểu cảm: emoji Unicode có sẵn trong bảng chọn; sticker ảnh = mọi file `.png/.gif/.webp` trong `public/assets/emoji/` (gõ `:tenfile:` hoặc bấm trong bảng). Hiện có `ball1..7`, `gem`, `tomato`. Bạn chỉ cần chép thêm ảnh (tên a-z, 0-9, `_`, `-`) là dùng được, không sửa code.

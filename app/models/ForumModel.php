@@ -77,12 +77,13 @@ class ForumModel extends Model
         return $this->fetchOne('SELECT * FROM forum_comments WHERE id = ?', [$id]);
     }
 
-    /** Thời điểm (unix) người này gửi bài/bình luận gần nhất – dùng cho giới hạn 30 giây. 0 nếu chưa từng. */
-    public function lastActivity(int $accountId): int
+    /** Thời điểm (unix) người này gửi bài/bình luận gần nhất – dùng cho giới hạn thời gian chờ (riêng bài viết / bình luận). 0 nếu chưa từng. */
+    /** Thời điểm (timestamp) lần gửi gần nhất của tài khoản, riêng cho bài viết hoặc bình luận. */
+    public function lastActivity(int $accountId, bool $isPost): int
     {
-        $a = $this->fetchValue('SELECT MAX(created_at) FROM forum_posts WHERE account_id = ?', [$accountId]);
-        $b = $this->fetchValue('SELECT MAX(created_at) FROM forum_comments WHERE account_id = ?', [$accountId]);
-        return max($a ? strtotime($a) : 0, $b ? strtotime($b) : 0);
+        $table = $isPost ? 'forum_posts' : 'forum_comments';   // chỉ 2 giá trị cố định, không lấy từ người dùng
+        $t = $this->fetchValue('SELECT MAX(created_at) FROM ' . $table . ' WHERE account_id = ?', [$accountId]);
+        return $t ? (int) strtotime($t) : 0;
     }
 
     public function createPost(int $accountId, ?string $title, string $content, ?array $media): int

@@ -2,7 +2,7 @@
 /**
  * PARTIAL: form gửi bài / bình luận.
  * Biến: $action ('forum/post' = đăng bài), $kind ('post'|'comment'), $postId (khi bình luận), $wait (giây còn phải chờ)
- * Giới hạn 30 giây được kiểm tra thật ở SERVER; JS chỉ đếm ngược cho người dùng đỡ bực.
+ * Giới hạn thời gian chờ được kiểm tra thật ở SERVER; JS chỉ đếm ngược cho người dùng đỡ bực.
  */
 $isPost  = ($kind ?? 'post') === 'post';
 $maxMb   = (int) config('forum.max_upload_mb', 4);
@@ -30,7 +30,7 @@ foreach (sticker_names() as $n => $file) { $stickerData[] = ['name' => $n, 'src'
             <input type="file" name="media" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/webm" hidden data-file>
         </label>
         <span class="composer__file small" data-file-name></span>
-        <span class="ms-auto small text-body-secondary d-none d-sm-inline">Tối đa <?= $maxMb ?>MB · chờ <?= (int) config('forum.cooldown_seconds', 30) ?>s giữa các lần gửi</span>
+        <span class="ms-auto small text-body-secondary d-none d-sm-inline">Tối đa <?= $maxMb ?>MB · <?= $isPost ? 'mỗi bài cách nhau ' . (int) (config('forum.post_cooldown_seconds', 300) / 60) . ' phút' : 'mỗi bình luận cách nhau ' . (int) config('forum.comment_cooldown_seconds', 15) . ' giây' ?></span>
         <button class="btn btn-comic btn-comic--red btn-sm" type="submit" data-submit><?= $isPost ? 'Đăng bài' : 'Gửi' ?></button>
     </div>
     <div class="emoji-panel" data-emoji-panel hidden></div>

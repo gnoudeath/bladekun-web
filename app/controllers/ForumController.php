@@ -4,7 +4,7 @@
  *
  * Quy tắc:
  *  - Ai cũng XEM được. Đăng bài / bình luận / thích cần đăng nhập, tài khoản không bị khoá.
- *  - Mỗi tài khoản chỉ được gửi (bài HOẶC bình luận) cách nhau tối thiểu forum.cooldown_seconds giây (mặc định 30).
+ *  - Chờ giữa hai lần gửi: bài viết forum.post_cooldown_seconds (mặc định 300 = 5 phút), bình luận forum.comment_cooldown_seconds (mặc định 15 giây).
  *    Kiểm tra ở SERVER bằng thời điểm gửi gần nhất trong database => đổi trình duyệt/F5 cũng không né được.
  *  - Đính kèm 1 ảnh hoặc video ≤ forum.max_upload_mb MB (xem Upload.php).
  *  - Chỉ chủ bài hoặc admin được xoá; chỉ admin được ghim.
@@ -42,7 +42,7 @@ class ForumController extends Controller
             'pages'   => $pages,
             'total'   => $total,
             'me'      => $this->me(),
-            'wait'    => $this->waitSeconds($viewer),
+            'wait'    => $this->waitSeconds($viewer, true),    // ô đăng bài
         ]);
     }
 
@@ -63,7 +63,7 @@ class ForumController extends Controller
             'post'     => $post,
             'comments' => $this->forum->comments((int) $post['id']),
             'me'       => $this->me(),
-            'wait'     => $this->waitSeconds($viewer),
+            'wait'     => $this->waitSeconds($viewer, false),   // ô bình luận
         ]);
     }
 
@@ -178,17 +178,25 @@ class ForumController extends Controller
         if ($content === '' && !$hasFile) { return [null, 'Hãy nhập nội dung hoặc đính kèm ảnh/video.']; }
         if (mb_strlen($content) > $max)   { return [null, "Nội dung tối đa $max ký tự."]; }
 
-        $wait = $this->waitSeconds($accountId);
-        if ($wait > 0) { return [null, "Bạn gửi quá nhanh. Vui lòng chờ thêm $wait giây nữa."]; }
+        $wait = $this->waitSeconds($accountId, $isPost);
+        if ($wait > 0) { return [null, 'Bạn gửi quá nhanh. Vui lòng chờ thêm ' . self::formatWait($wait) . ' nữa.']; }
 
         return Upload::handle('media');
     }
 
     /** Còn phải chờ bao nhiêu giây nữa mới được gửi tiếp (0 = gửi được ngay). View dùng số này để đếm ngược. */
-    private function waitSeconds(int $accountId): int
+    private function waitSeconds(int $accountId, bool $isPost): int
     {
         if ($accountId <= 0) { return 0; }
-        return max(0, (int) config('forum.cooldown_seconds', 30) - (time() - $this->forum->lastActivity($accountId)));
+        // Bài và bình luận có thời gian chờ RIÊNG, tính từ lần gửi gần nhất CÙNG LOẠI.
+        $cooldown = (int) config($isPost ? 'forum.post_cooldown_seconds' : 'forum.comment_cooldown_seconds', $isPost ? 300 : 15);
+        return max(0, $cooldown - (time() - $this->forum->lastActivity($accountId, $isPost)));
+    }
+
+    /** 125 => "2 phút 5 giây", 15 => "15 giây". */
+    private static function formatWait(int $s): string
+    {
+        return $s >= 60 ? intdiv($s, 60) . ' phút' . ($s % 60 ? ' ' . ($s % 60) . ' giây' : '') : $s . ' giây';
     }
 
     private function back(int $postId): void

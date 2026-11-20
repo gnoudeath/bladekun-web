@@ -97,7 +97,8 @@ return [
     // Diễn đàn (cần chạy database/forum.sql một lần)
     // ---------------------------------------------------------------
     'forum' => [
-        'cooldown_seconds' => 30,     // mỗi tài khoản phải chờ bấy nhiêu giây giữa hai lần gửi (bài hoặc bình luận)
+        'post_cooldown_seconds'    => 300,   // đăng bài: mỗi tài khoản phải chờ 5 phút giữa hai bài
+        'comment_cooldown_seconds' => 15,    // bình luận: chờ 15 giây giữa hai bình luận
         'max_upload_mb'    => 4,      // dung lượng tối đa ảnh/video đính kèm
         'max_content'      => 2000,   // số ký tự tối đa của một bài/bình luận
         'max_title'        => 100,
