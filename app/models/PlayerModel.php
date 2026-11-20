@@ -35,7 +35,7 @@ class PlayerModel extends Model
     /** Mức tối thiểu để được vào bảng của một loại (0 = không giới hạn). Cấu hình ở config game.rank_min_power / rank_min_pet_power. */
     public static function rankMin(string $type): int
     {
-        $key = ['power' => 'rank_min_power', 'pet' => 'rank_min_pet_power'][$type] ?? null;
+        $key = ['power' => 'rank_min_power', 'pet' => 'rank_min_pet_power', 'boss' => 'rank_min_boss', 'topup' => 'rank_min_topup'][$type] ?? null;
         return $key ? max(0, (int) config('game.' . $key, 0)) : 0;
     }
 

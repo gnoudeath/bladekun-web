@@ -64,6 +64,8 @@ return [
         // Người chưa đạt mức này sẽ không hiện trong Top sức mạnh / Top đệ tử (và trang chủ).
         'rank_min_power'     => 10000000000,   // 10 tỉ – Top sức mạnh
         'rank_min_pet_power' => 10000000000,   // 10 tỉ – Top đệ tử (sức mạnh đệ tử)
+        'rank_min_boss'      => 6,             // Top diệt boss: phải hạ HƠN 5 boss (>= 6)
+        'rank_min_topup'     => 50000,         // Top nạp: tổng nạp từ 50.000 VNĐ trở lên
 
         // news_posts.status nào được coi là "đã đăng"? (kiểm tra trong database của bạn)
         'news_published_status' => 1,
