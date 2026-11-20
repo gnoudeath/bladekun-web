@@ -440,7 +440,7 @@ Web và server game dùng chung database nên mọi id (icon trang bị, avatar 
 `<thư mục game>/resources/normal/image/4/icon/<id>.png` qua địa chỉ `?r=media&id=<số>` (`MediaController` + `app/core/GameAssets.php`).
 
 - Cấu hình trong `config/config.php`, mục `assets`:
-  - `game_path`: đường dẫn thư mục game, ví dụ `'D:/Nro-Online'`. Để `null` thì web tự tìm thư mục **cùng cấp**: `../Nro-Online` hoặc `../nro-online`
+  - `game_path`: đường dẫn thư mục game, ví dụ `'D:/Nro Blade/bladekun-server'` (dùng dấu / kể cả trên Windows). Để `null` thì web tự tìm thư mục **cùng cấp**: `../Nro-Online` hoặc `../nro-online`
     (ví dụ `C:/xampp/htdocs/bladekun-web` và `C:/xampp/htdocs/Nro-Online`).
   - `zoom`: 1–4 (mặc định 4, nét nhất).
 - **Game không có ảnh** => web tìm ở `public/assets/extra/icon/<id>.png`. Đây là thư mục để bạn tự thêm ảnh cho thứ server không có

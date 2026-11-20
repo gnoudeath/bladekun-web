@@ -81,7 +81,7 @@ return [
     'assets' => [
         // Đường dẫn tới thư mục project game (có thư mục resources/ bên trong).
         // null = tự tìm thư mục cùng cấp: ../Nro-Online hoặc ../nro-online. Hoặc ghi rõ, ví dụ 'D:/Nro-Online'.
-        'game_path' => null,
+        'game_path' => 'D:/Nro Blade/bladekun-server',   // thư mục server game (nơi có resources/normal/image)
         // Mức zoom của ảnh (1-4). 4 = nét nhất.
         'zoom'      => 4,
         // Game không có ảnh nào thì web tìm ở public/assets/extra/icon/<id>.png (bạn tự thêm).
