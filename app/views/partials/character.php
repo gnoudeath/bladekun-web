@@ -8,10 +8,12 @@
 ?>
 <div class="char-card">
     <div class="char-stage" style="width:<?= CharacterModel::STAGE_W ?>px;height:<?= CharacterModel::STAGE_H ?>px" aria-label="Hình nhân vật">
+        <div class="char-stage__flip<?= config('game.char_flip', false) ? ' is-flipped' : '' ?>">
         <?php foreach ($look['layers'] as $l): ?>
             <img class="char-stage__layer" src="<?= e($l['src']) ?>" alt="" width="<?= (int) $l['w'] ?>" height="<?= (int) $l['h'] ?>"
                  style="left:<?= (int) $l['left'] ?>px;top:<?= (int) $l['top'] ?>px;z-index:<?= (int) $l['z'] ?>">
         <?php endforeach; ?>
+        </div>
         <?php if (!$look['layers']): ?><span class="char-stage__empty">Chưa có ảnh</span><?php endif; ?>
     </div>
     <?php if ($look['approx'] && $look['layers']): ?>

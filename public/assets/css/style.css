@@ -278,6 +278,8 @@ div.planet-card h3 { font-size: 1.25rem; font-weight: 700; margin: .2rem 0; colo
 .char-card { margin-top: 1rem; }
 .char-stage { position: relative; margin: 0 auto; border-radius: 16px; border: 1px solid var(--line); overflow: hidden; max-width: 100%;
   background: radial-gradient(circle at 50% 35%, rgba(255, 138, 31, .55) 0%, rgba(79, 60, 160, .55) 55%, #0d1330 100%); box-shadow: inset 0 0 40px rgba(0, 0, 0, .35); }
+.char-stage__flip { position: absolute; inset: 0; }
+.char-stage__flip.is-flipped { transform: scaleX(-1); }   /* nhân vật quay mặt sang trái như khi đi sang trái trong game */
 .char-stage__layer { position: absolute; max-width: none; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .45)); }
 .char-stage__empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-weight: 600; }
 .char-note { font-size: .78rem; text-align: center; margin: .5rem 0 0; color: var(--muted); }

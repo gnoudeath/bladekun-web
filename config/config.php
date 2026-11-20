@@ -60,6 +60,9 @@ return [
         // Bảng xếp hạng có ẩn nhân vật của tài khoản admin / bị khoá không?
         'rank_hide_admins' => true,
 
+        // Hình nhân vật quay mặt sang trái (true) hay sang phải (false)? Trong game nhân vật quay theo hướng đang đi.
+        'char_flip' => true,
+
         // Sức mạnh tối thiểu để được vào bảng xếp hạng (0 = không giới hạn).
         // Người chưa đạt mức này sẽ không hiện trong Top sức mạnh / Top đệ tử (và trang chủ).
         'rank_min_power'     => 10000000000,   // 10 tỉ – Top sức mạnh
