@@ -232,5 +232,5 @@ function head_avatar($head, $gender): string
         return icon_url($avatar);
     }
     $meta = CharacterModel::headMeta((int) $head, (int) $gender);
-    return $meta ? asset('img/' . $meta['f']) : asset('img/gem.png');
+    return $meta ? CharacterModel::partSrc($meta) : asset('img/gem.png');
 }

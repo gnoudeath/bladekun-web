@@ -145,13 +145,21 @@ class CharacterModel extends Model
         // Đầu: game căn theo MỐC CHUNG (dy là vị trí mép trên so với mốc; cằm luôn ở dy + cao = 80 với phần lớn đầu),
         // nên KHÔNG căn theo đáy ảnh – các đầu cao thấp khác nhau (Namếc, Krillin...) mới cùng khớp với thân.
         // Số HEAD_RISE = độ cao mốc đầu so với mép trên thân: TĂNG => đầu nhô CAO lên, GIẢM => đầu hạ THẤP xuống.
-        $headTop = $bodyTop - self::HEAD_RISE + $h['dy'];
+        // Thân là ảnh rời (trang phục mới) thường cao hơn/có cánh, áo choàng: neo đầu theo chiều cao thân chuẩn 48 để đầu không bị nhô lên.
+        $bodyRef = isset($b['i']) ? $legTop + 24 - 48 + $b['dy'] : $bodyTop;
+        $headTop = $bodyRef - self::HEAD_RISE + $h['dy'];
 
         $mk = fn(array $p, int $top, int $z) => [
-            'src' => asset('img/' . $p['f']), 'w' => $p['w'], 'h' => $p['h'],
+            'src' => self::partSrc($p), 'w' => $p['w'], 'h' => $p['h'],
             'left' => $left + $p['dx'] + ($z === 3 ? -13 : 2), 'top' => $top, 'z' => $z,
         ];
         return [[$mk($l, $legTop, 1), $mk($b, $bodyTop, 2), $mk($h, $headTop, 3)], $approx];
+    }
+
+    /** Đường dẫn ảnh của một mảnh: ảnh đã cắt sẵn ('f') hoặc ảnh rời trong thư mục game ('i' = id icon). */
+    public static function partSrc(array $p): string
+    {
+        return isset($p['i']) ? icon_url((int) $p['i']) : asset('img/' . $p['f']);
     }
 
     /** Ảnh đầu (cho avatar diễn đàn): đầu thật nếu có ảnh, không thì đầu mặc định theo hành tinh. */

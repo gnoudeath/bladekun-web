@@ -13,6 +13,7 @@ Nó làm gì:
  4. Ghi public/assets/data/parts.json (vị trí lệch dx, dy của mảnh) để PHP xếp chồng đầu + thân + chân.
  5. Copy icon trang bị (resources/normal/image/4/icon/<icon_id>.png) cho mọi item trong Sql/Sql Nro.sql (hoặc --sql).
 
+Ảnh nhỏ có id lớn hơn bảng ảnh (trang phục mới) được đọc thẳng từ resources/normal/image/4/icon/<id>.png.
 Lưu ý: mảnh nào KHÔNG có ảnh trong thư mục game (ví dụ trang phục mới được client tải từ máy chủ ảnh)
 sẽ bị bỏ qua; website tự lùi về bộ đồ cơ bản theo hành tinh.
 """
@@ -59,7 +60,12 @@ def main():
     atlas = {}
 
     def sprite(i):
-        if i < 0 or i >= len(ents): return None
+        if i < 0: return None
+        if i >= len(ents):
+            # Id lớn hơn bảng ảnh = ảnh rời, game lưu nguyên mảnh ở resources/normal/image/4/icon/<id>.png
+            # (ví dụ áo/quần Thánh Tôn: id 24002, 24017...). Cắt sẵn thì không cần cắt từ tờ ảnh.
+            f = f'{g}/resources/normal/image/4/icon/{i}.png'
+            return Image.open(f).convert('RGBA') if os.path.exists(f) else None   # chỉ để lấy kích thước, KHÔNG lưu lại
         t, x, y, w, h = ents[i]
         if t not in atlas:
             f = f'{g}/resources/normal/data/4/img/Big{t}.png'
@@ -76,6 +82,10 @@ def main():
         ic, dx, dy = e[k]
         im = sprite(ic)
         if im is None: continue
+        if ic >= len(ents):
+            # ảnh rời: không copy, web đọc thẳng từ thư mục game theo id icon (khoá 'i')
+            meta[name][str(pid)] = {'i': ic, 'w': im.width, 'h': im.height, 'dx': dx * ZOOM, 'dy': dy * ZOOM}
+            continue
         fn = f'parts/{pre}{pid}.png'
         im.save(f'{out_img}/{fn}', optimize=True)
         meta[name][str(pid)] = {'f': fn, 'w': im.width, 'h': im.height, 'dx': dx * ZOOM, 'dy': dy * ZOOM}
